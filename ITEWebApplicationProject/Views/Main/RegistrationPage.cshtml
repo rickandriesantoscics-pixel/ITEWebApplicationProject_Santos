@@ -1,0 +1,42 @@
+﻿@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<p>Registration Page</p>
+<input type="text" ng-model="firstName" placeholder="First Name" />
+<input type="text" ng-model="middleName" placeholder="Middle Name" />
+<input type="text" ng-model="lastName" placeholder="Last Name" />
+<input type="text" ng-model="suffix" placeholder="Suffix" />
+<input type="email" ng-model="email" placeholder="Email Address" />
+<input type="password" ng-model="password" placeholder="Password" />
+<input type="password" ng-model="confirmPassword" placeholder="Confirm Password" />
+<input type="text" ng-model="contactNumber" placeholder="Contact Number" />
+<input type="text" ng-model="address" placeholder="Address" />
+<button ng-click="registrationFunc()">Register</button>
+<button ng-click="redirectFunc()">About Page</button>
+  
+<table>
+    <tr>
+        <th>First Name</th>
+        <th>Middle Name</th>
+        <th>Last Name</th>
+        <th>Suffix</th>
+        <th>Email</th>
+        <th>Contact Number</th>
+        <th>Address</th>
+        <th>Action</th>
+    </tr>
+    <tr ng-repeat="udata in userarray"> 
+        <td>{{udata.FName}}</td>
+        <td>{{udata.MName}}</td>
+        <td>{{udata.LName}}</td>
+        <td>{{udata.Suffix}}</td>
+        <td>{{udata.Email}}</td>
+        <td>{{udata.ContactNumber}}</td>
+        <td>{{udata.Address}}</td>
+        <td>
+            <button ng-click="updateFunc($index)">EDIT</button>
+            <button ng-click="deleteFunc($index)">DELETE</button>
+        </td>
+    </tr>
+</table>
