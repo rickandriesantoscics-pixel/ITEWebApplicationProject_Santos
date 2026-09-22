@@ -1,7 +1,58 @@
-﻿@{
+@{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = "About";
 }
 
-<h2>About This Application</h2>
-<p><strong>Purpose:</strong> A functional ASP.NET MVC web application integrated with AngularJS for employee management.</p>
-<p><strong>Technologies:</strong> ASP.NET MVC, C#, AngularJS, HTML5, CSS.</p>   
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">About ThreadLine</span>
+
+        <p class="grey-text text-darken-1">
+            ThreadLine is a Customer Management System for a clothing store, built with ASP.NET MVC and AngularJS.
+            It lets the store register customers, view every record in a live table, update customer details,
+            and remove records that are no longer needed.
+        </p>
+
+        <p class="text-xl font-semibold text-slate-800 mt-8">Purpose</p>
+        <p class="grey-text text-darken-1">
+            To provide a simple, connected system for keeping clothing-store customer records accurate and organised,
+            with client-side validation so incomplete or invalid data never enters the list.
+        </p>
+
+        <p class="text-xl font-semibold text-slate-800 mt-8">Features</p>
+        <ul class="collection">
+            <li class="collection-item">Register new customers with complete details</li>
+            <li class="collection-item">View all customers in a live, dynamically bound table</li>
+            <li class="collection-item">Edit and update existing customer records</li>
+            <li class="collection-item">Delete records with a confirmation prompt</li>
+            <li class="collection-item">Client-side validation with SweetAlert2 feedback</li>
+        </ul>
+
+        <p class="text-xl font-semibold text-slate-800 mt-8">Technologies Used</p>
+        <div class="row">
+            <div class="col s12 m6">
+                <ul class="collection">
+                    <li class="collection-item">ASP.NET MVC 5 (C#)</li>
+                    <li class="collection-item">AngularJS 1.x</li>
+                    <li class="collection-item">HTML5, CSS, JavaScript</li>
+                </ul>
+            </div>
+            <div class="col s12 m6">
+                <ul class="collection">
+                    <li class="collection-item">Materialize CSS</li>
+                    <li class="collection-item">Tailwind CSS</li>
+                    <li class="collection-item">SweetAlert2</li>
+                </ul>
+            </div>
+        </div>
+
+        <p class="text-xl font-semibold text-slate-800 mt-8">Project Information</p>
+        <p class="grey-text text-darken-1">
+            ITE Electronic Machine Problem 1-1 &mdash; an ASP.NET MVC + AngularJS activity.
+            The application stores all records in an AngularJS array on the client; no database is used.
+        </p>
+
+        <p class="text-xl font-semibold text-slate-800 mt-8">Team</p>
+        <p class="grey-text text-darken-1">Developed by <strong>Rick Andrie R. Rocio</strong>.</p>
+    </div>
+</div>

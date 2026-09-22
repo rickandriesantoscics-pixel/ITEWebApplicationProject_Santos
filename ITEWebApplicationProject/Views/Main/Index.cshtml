@@ -1,0 +1,54 @@
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = "Home";
+}
+
+<!-- ng-init calls the AngularJS controller, which fetches the welcome message
+     from the C# MainController (GetWelcomeMessage) and binds it below. -->
+<div ng-init="GetWelcomeMessage()">
+
+    <div class="card">
+        <div class="card-content">
+            <p class="card-title text-3xl font-semibold">{{ welcomeMessage }}</p>
+            <p class="grey-text text-darken-1">
+                ThreadLine is a simple customer management system for a clothing store. Register customers,
+                keep their details organised, and manage every record in one connected system.
+            </p>
+            <div class="mt-4">
+                <a class="btn waves-effect btn-store" ng-click="redirectFunc('/Main/RegistrationPage')">Register a Customer</a>
+                <a class="btn waves-effect btn-store-outline" ng-click="redirectFunc('/Main/AboutPage')">About</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12 m4">
+            <div class="card">
+                <div class="card-content">
+                    <p><i class="material-icons medium">person_add</i></p>
+                    <p class="card-title">Register Customers</p>
+                    <p class="grey-text text-darken-1">Add new customer records with complete, validated details.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m4">
+            <div class="card">
+                <div class="card-content">
+                    <p><i class="material-icons medium">table_view</i></p>
+                    <p class="card-title">View Records</p>
+                    <p class="grey-text text-darken-1">See every customer in a live table that updates instantly.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m4">
+            <div class="card">
+                <div class="card-content">
+                    <p><i class="material-icons medium">edit_note</i></p>
+                    <p class="card-title">Edit or Delete</p>
+                    <p class="grey-text text-darken-1">Update existing records or remove them with a confirmation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

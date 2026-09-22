@@ -1,26 +1,90 @@
-﻿<!DOCTYPE html>
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - ThreadLine</title>
 
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- CSS Framework: Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Material Design Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
+
+    <!-- CSS Framework: Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        /* Materialize's global element rules fight the Tailwind layout - neutralise them.
+           (Materialize sets nav { width: 100% }, which is what squashed the header.) */
+        nav { width: auto; height: auto; line-height: normal; background: transparent; box-shadow: none; }
+        body { background-color: #f1f5f9; }
+
+        /* Simple solid store buttons (no gradients) */
+        .btn-store { background-color: #0f172a; }
+        .btn-store:hover { background-color: #334155; }
+        .btn-store-accent { background-color: #475569; }
+        .btn-store-accent:hover { background-color: #64748b; }
+        .btn-store-outline { background-color: #e2e8f0; color: #0f172a; }
+        .btn-store-outline:hover { background-color: #cbd5e1; }
+
+        /* Required-field marker */
+        .req { color: #dc2626; font-weight: 700; }
+
+        /* Roomier cards */
+        .card { margin: 0 0 1.5rem 0; }
+        .card-content { padding: 1.5rem 1.75rem; }
+    </style>
 </head>
 <body ng-app="ITEWebApplicationProjectModule" ng-controller="ITEWebApplicationProjectController">
-    <div>
-        @RenderBody()
-    </div>
 
+    <!-- Header / Navigation -->
+    <header class="bg-slate-900 text-white shadow">
+        <div class="w-full px-4 sm:px-6 lg:px-10 py-3 flex flex-wrap items-center justify-between gap-4">
+            <a class="flex items-center gap-2 cursor-pointer shrink-0" ng-click="redirectFunc('/Main/Index')">
+                <i class="material-icons">storefront</i>
+                <span class="text-xl font-semibold tracking-wide whitespace-nowrap">ThreadLine</span>
+            </a>
+            <div class="flex flex-wrap items-center gap-1 text-sm">
+                <a class="px-3 py-2 rounded hover:bg-slate-700 cursor-pointer" ng-click="redirectFunc('/Main/Index')">Home</a>
+                <a class="px-3 py-2 rounded hover:bg-slate-700 cursor-pointer" ng-click="redirectFunc('/Main/RegistrationPage')">Register</a>
+                <a class="px-3 py-2 rounded hover:bg-slate-700 cursor-pointer" ng-click="redirectFunc('/Main/AboutPage')">About</a>
+                <a class="px-3 py-2 rounded hover:bg-slate-700 cursor-pointer" ng-click="redirectFunc('/Main/ContactPage')">Contact</a>
+                <a class="px-3 py-2 rounded bg-slate-700 hover:bg-slate-600 cursor-pointer" ng-click="redirectFunc('/Main/LoginPage')">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page content (full width) -->
+    <main class="w-full px-4 sm:px-6 lg:px-10 py-8">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-300 mt-12">
+        <div class="w-full px-4 sm:px-6 lg:px-10 py-6 flex flex-wrap items-center justify-between gap-3 text-sm">
+            <p>&copy; @DateTime.Now.Year ThreadLine Clothing Store &mdash; Customer Management System</p>
+            <div class="flex flex-wrap gap-4">
+                <a class="cursor-pointer hover:text-white" ng-click="redirectFunc('/Main/Index')">Home</a>
+                <a class="cursor-pointer hover:text-white" ng-click="redirectFunc('/Main/RegistrationPage')">Register</a>
+                <a class="cursor-pointer hover:text-white" ng-click="redirectFunc('/Main/AboutPage')">About</a>
+                <a class="cursor-pointer hover:text-white" ng-click="redirectFunc('/Main/ContactPage')">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Dependencies -->
     <script src="~/Scripts/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="~/Scripts/angular.min.js"></script>
+
+    <!-- Application Scripts (order matters) -->
     <script src="~/Scripts/HolyScripts/Module.js"></script>
     <script src="~/Scripts/HolyScripts/Service.js"></script>
     <script src="~/Scripts/HolyScripts/Controller.js"></script>
-
 </body>
 </html>
