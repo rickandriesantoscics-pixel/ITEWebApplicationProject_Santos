@@ -3,7 +3,6 @@
     ViewBag.Title = "Customer Registration";
 }
 
-<!-- Registration form -->
 <div class="card">
     <div class="card-content">
         <span class="card-title">{{ editingIndex == -1 ? 'Register a Customer' : 'Editing a Customer' }}</span>
@@ -17,13 +16,8 @@
         <form ng-submit="$event.preventDefault()">
 
             <div class="row">
-                <div class="input-field col s12 m6">
-                    <input id="customer_id" type="text" ng-model="customerID" required />
-                    <label for="customer_id">Customer ID <span class="req">*</span></label>
-                    <span class="helper-text">Numbers only, maximum 10 digits. Must be unique.</span>
-                </div>
-                <div class="input-field col s12 m6">
-                    <input id="username" type="text" ng-model="username" required />
+                <div class="input-field col s12">
+                    <input id="username" type="text" ng-model="username" required maxlength="20" />
                     <label for="username">Username <span class="req">*</span></label>
                     <span class="helper-text">Maximum 20 characters. Must be unique.</span>
                 </div>
@@ -31,12 +25,12 @@
 
             <div class="row">
                 <div class="input-field col s12 m6">
-                    <input id="first_name" type="text" ng-model="firstName" required />
+                    <input id="first_name" type="text" ng-model="firstName" required maxlength="50" />
                     <label for="first_name">First Name <span class="req">*</span></label>
                     <span class="helper-text">Maximum 50 characters.</span>
                 </div>
                 <div class="input-field col s12 m6">
-                    <input id="middle_name" type="text" ng-model="middleName" />
+                    <input id="middle_name" type="text" ng-model="middleName" maxlength="50" />
                     <label for="middle_name">Middle Name <span class="grey-text">(optional)</span></label>
                     <span class="helper-text">Optional. Maximum 50 characters.</span>
                 </div>
@@ -44,12 +38,12 @@
 
             <div class="row">
                 <div class="input-field col s12 m6">
-                    <input id="last_name" type="text" ng-model="lastName" required />
+                    <input id="last_name" type="text" ng-model="lastName" required maxlength="50" />
                     <label for="last_name">Last Name <span class="req">*</span></label>
                     <span class="helper-text">Maximum 50 characters.</span>
                 </div>
                 <div class="input-field col s12 m6">
-                    <input id="suffix" type="text" ng-model="suffix" />
+                    <input id="suffix" type="text" ng-model="suffix" maxlength="10" />
                     <label for="suffix">Suffix <span class="grey-text">(optional)</span></label>
                     <span class="helper-text">Optional (Jr., III, ...). Maximum 10 characters.</span>
                 </div>
@@ -57,12 +51,12 @@
 
             <div class="row">
                 <div class="input-field col s12 m6">
-                    <input id="email" type="email" ng-model="email" required />
+                    <input id="email" type="email" ng-model="email" required maxlength="254" />
                     <label for="email">Email Address <span class="req">*</span></label>
                     <span class="helper-text">Valid email address. Must be unique.</span>
                 </div>
                 <div class="input-field col s12 m6">
-                    <input id="contact_number" type="tel" ng-model="contactNumber" required />
+                    <input id="contact_number" type="tel" ng-model="contactNumber" required maxlength="11"/>
                     <label for="contact_number">Contact Number <span class="req">*</span></label>
                     <span class="helper-text">Must start with 09 and be exactly 11 digits.</span>
                 </div>
@@ -70,12 +64,12 @@
 
             <div class="row">
                 <div class="input-field col s12 m6">
-                    <input id="password" type="password" ng-model="password" required />
+                    <input id="password" type="password" ng-model="password" required maxlength="64" />
                     <label for="password">Password <span class="req">*</span></label>
                     <span class="helper-text">At least 8 characters with uppercase, lowercase, number, and special character.</span>
                 </div>
                 <div class="input-field col s12 m6">
-                    <input id="confirm_password" type="password" ng-model="confirmPassword" required />
+                    <input id="confirm_password" type="password" ng-model="confirmPassword" required maxlength="64" />
                     <label for="confirm_password">Confirm Password <span class="req">*</span></label>
                     <span class="helper-text">Must match the password.</span>
                 </div>
@@ -101,9 +95,9 @@
 
             <div class="row">
                 <div class="input-field col s12">
-                    <input id="address" type="text" ng-model="address" required />
+                    <input id="address" type="text" ng-model="address" required maxlength="254" />
                     <label for="address">Address <span class="req">*</span></label>
-                    <span class="helper-text">Maximum 200 characters.</span>
+                    <span class="helper-text">Maximum 254 characters.</span>
                 </div>
             </div>
 
@@ -132,7 +126,6 @@
         <table class="striped responsive-table">
             <thead>
                 <tr>
-                    <th>Customer ID</th>
                     <th>First Name</th>
                     <th>Middle Name</th>
                     <th>Last Name</th>
@@ -148,7 +141,6 @@
             </thead>
             <tbody>
                 <tr ng-repeat="customer in customerArray">
-                    <td>{{customer.CustomerID}}</td>
                     <td>{{customer.FName}}</td>
                     <td>{{customer.MName}}</td>
                     <td>{{customer.LName}}</td>

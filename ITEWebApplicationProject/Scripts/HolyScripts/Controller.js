@@ -43,7 +43,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
     // CLEAR REGISTRATION FORM
     // ---------------------------------------------------------------
     $scope.clearRegistrationFunc = function () {
-        $scope.customerID = "";
         $scope.username = "";
         $scope.firstName = "";
         $scope.middleName = "";
@@ -66,14 +65,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
     $scope.inputValidation = function (userindex) {
 
         // ----- Required fields -----
-        if ($scope.customerID == undefined || $scope.customerID == "") {
-            Swal.fire({
-                title: "Notification",
-                text: "Customer ID is required.",
-                icon: "error"
-            });
-            return false;
-        }
         if ($scope.firstName == undefined || $scope.firstName == "") {
             Swal.fire({
                 title: "Notification",
@@ -155,16 +146,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
             return false;
         }
 
-        // ----- Numeric validation -----
-        if (!/^\d+$/.test($scope.customerID)) {
-            Swal.fire({
-                title: "Notification",
-                text: "Customer ID must contain numbers only.",
-                icon: "error"
-            });
-            return false;
-        }
-
         // ----- Email format -----
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($scope.email)) {
             Swal.fire({
@@ -215,80 +196,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
             return false;
         }
 
-        // ----- Maximum lengths -----
-        if ($scope.customerID.length > 10) {
-            Swal.fire({
-                title: "Notification",
-                text: "Customer ID cannot exceed 10 digits.",
-                icon: "error"
-            });
-            return false;
-        }
-        if ($scope.firstName.length > 50) {
-            Swal.fire({
-                title: "Notification",
-                text: "First name cannot exceed 50 characters.",
-                icon: "error"
-            });
-            return false;
-        }
-        if ($scope.middleName != undefined && $scope.middleName != "" && $scope.middleName.length > 50) {
-            Swal.fire({
-                title: "Notification",
-                text: "Middle name cannot exceed 50 characters.",
-                icon: "error"
-            });
-            return false;
-        }
-        if ($scope.suffix != undefined && $scope.suffix != "" && $scope.suffix.length > 10) {
-            Swal.fire({
-                title: "Notification",
-                text: "Suffix cannot exceed 10 characters.",
-                icon: "error"
-            });
-            return false;
-        }
-        if ($scope.lastName.length > 50) {
-            Swal.fire({
-                title: "Notification",
-                text: "Last name cannot exceed 50 characters.",
-                icon: "error"
-            });
-            return false;
-        }
-        if ($scope.username.length > 20) {
-            Swal.fire({
-                title: "Notification",
-                text: "Username cannot exceed 20 characters.",
-                icon: "error"
-            });
-            return false;
-        }
-        if ($scope.email.length > 254) {
-            Swal.fire({
-                title: "Notification",
-                text: "Email cannot exceed 254 characters.",
-                icon: "error"
-            });
-            return false;
-        }
-        if ($scope.password.length > 254) {
-            Swal.fire({
-                title: "Notification",
-                text: "Password cannot exceed 254 characters.",
-                icon: "error"
-            });
-            return false;
-        }
-        if ($scope.address.length > 200) {
-            Swal.fire({
-                title: "Notification",
-                text: "Address cannot exceed 200 characters.",
-                icon: "error"
-            });
-            return false;
-        }
-
         // ----- Uniqueness (skip the row being updated) -----
         var emailLower = $scope.email.toLowerCase();
         var usernameLower = $scope.username.toLowerCase();
@@ -297,14 +204,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
 
             if (i == userindex) {
                 continue;
-            }
-            if ($scope.customerArray[i].CustomerID == $scope.customerID) {
-                Swal.fire({
-                    title: "Notification",
-                    text: "Customer ID already exists.",
-                    icon: "error"
-                });
-                return false;
             }
             if ($scope.customerArray[i].Username.toLowerCase() == usernameLower) {
                 Swal.fire({
@@ -335,7 +234,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
         }
 
         var customer = {
-            CustomerID: $scope.customerID,
             Username: $scope.username,
             FName: $scope.firstName,
             MName: $scope.middleName,
@@ -362,7 +260,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
     $scope.editFunc = function (index) {
         var customer = $scope.customerArray[index];
 
-        $scope.customerID = customer.CustomerID;
         $scope.username = customer.Username;
         $scope.firstName = customer.FName;
         $scope.middleName = customer.MName;
@@ -396,7 +293,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
         }
 
         var customer = $scope.customerArray[userindex];
-        customer.CustomerID = $scope.customerID;
         customer.Username = $scope.username;
         customer.FName = $scope.firstName;
         customer.MName = $scope.middleName;
