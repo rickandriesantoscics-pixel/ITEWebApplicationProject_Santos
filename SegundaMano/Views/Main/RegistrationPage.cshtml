@@ -1,0 +1,354 @@
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+    <!-- Form Container Card -->
+    <div class="card border border-[#ded8cd] shadow-md overflow-hidden rounded-lg bg-white">
+        
+        <!-- Form Header (Vintage Dark Red Header) -->
+        <div class="bg-[#541220] text-white p-6 sm:p-8 border-b-2 border-[#380c16]">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h1 class="card-title font-serif text-2xl sm:text-3xl font-bold text-white tracking-wide m-0">
+                        {{ editingIndex == -1 ? 'Register a Customer' : 'Editing a Customer' }}
+                    </h1>
+                    <p class="text-[#f5ecea] text-sm mt-1.5 mb-0 max-w-2xl font-normal">
+                        {{ editingIndex == -1 ? 'Fill in the customer details below, then click Register Customer.' : 'Update the details below, then click Update Customer.' }}
+                    </p>
+                </div>
+
+                <div class="shrink-0 text-right">
+                    <span class="inline-block px-3 py-1.5 rounded bg-[#380c16] border border-[#7a1c31] text-xs font-semibold text-white">
+                        Fields marked with <span class="req text-rose-300 font-bold">*</span> are required.
+                    </span>
+                </div>
+            </div>
+
+            <!-- Active Editing Notice Banner -->
+            <div ng-if="editingIndex != -1" class="mt-4 p-3 rounded bg-[#380c16] border border-amber-400 text-amber-200 text-xs flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                    <i class="material-icons text-amber-300 text-base">edit</i>
+                    <span><strong>Editing Customer #{{ editingIndex + 1 }}:</strong> Make changes below and click <strong>Update Customer</strong> to commit changes.</span>
+                </div>
+                <button type="button" class="underline hover:text-white cursor-pointer font-bold" ng-click="clearRegistrationFunc()">Cancel Edit</button>
+            </div>
+        </div>
+
+        <!-- Form Content -->
+        <div class="card-content p-6 sm:p-10">
+            
+            <form name="regForm" novalidate ng-submit="editingIndex == -1 ? registrationFunc() : updateFunc(editingIndex)">
+
+                <!-- SECTION 1: Account Credentials -->
+                <div class="mb-8">
+                    <div class="flex items-center gap-2 pb-2 mb-4 border-b-2 border-stone-200">
+                        <span class="w-6 h-6 rounded bg-[#6b1d2f] text-white text-xs font-bold flex items-center justify-center">1</span>
+                        <h2 class="text-xs uppercase tracking-wider font-bold text-stone-900 m-0">Account Credentials</h2>
+                    </div>
+
+                    <div class="row m-0">
+                        <div class="input-field col s12 p-0">
+                            <input id="username" name="username" type="text" ng-model="username" required maxlength="20" placeholder=" " autocomplete="off" />
+                            <label for="username">Username <span class="req">*</span></label>
+                            <span class="helper-text text-stone-600 text-xs font-medium">Maximum 20 characters.</span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.username.$touched && regForm.username.$error.required">
+                                <i class="material-icons text-xs">error</i> Username is required.
+                            </span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.username.$touched && regForm.username.$error.maxlength">
+                                <i class="material-icons text-xs">error</i> Username cannot exceed 20 characters.
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-0 -mx-3">
+                        <div class="input-field col s12 m6 px-3">
+                            <input id="password" name="password" type="password" ng-model="password" ng-pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/" required maxlength="64" placeholder=" " autocomplete="new-password" />
+                            <label for="password">Password <span class="req">*</span></label>
+                            <span class="helper-text text-stone-600 text-xs font-medium">Maximum 64 characters.</span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.password.$touched && regForm.password.$error.required">
+                                <i class="material-icons text-xs">error</i> Password is required.
+                            </span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.password.$touched && regForm.password.$error.pattern">
+                                <i class="material-icons text-xs">error</i> Password must be at least 8 characters and include uppercase, lowercase, number, and special characters.
+                            </span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.password.$touched && regForm.password.$error.maxlength">
+                                <i class="material-icons text-xs">error</i> Password cannot exceed 64 characters.
+                            </span>
+                        </div>
+                        <div class="input-field col s12 m6 px-3">
+                            <input id="confirm_password" name="confirmPassword" type="password" ng-model="confirmPassword" ng-class="{'border-error-force': regForm.confirmPassword.$touched && confirmPassword !== password}" required maxlength="64" placeholder=" " autocomplete="new-password" />
+                            <label for="confirm_password">Confirm Password <span class="req">*</span></label>
+                            <span class="helper-text text-stone-600 text-xs font-medium">Maximum 64 characters.</span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.confirmPassword.$touched && regForm.confirmPassword.$error.required">
+                                <i class="material-icons text-xs">error</i> Confirm password is required.
+                            </span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.confirmPassword.$touched && confirmPassword !== password && confirmPassword">
+                                <i class="material-icons text-xs">error</i> Passwords do not match.
+                            </span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.confirmPassword.$touched && regForm.confirmPassword.$error.maxlength">
+                                <i class="material-icons text-xs">error</i> Confirm password cannot exceed 64 characters.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: Personal Information -->
+                <div class="mb-8">
+                    <div class="flex items-center gap-2 pb-2 mb-4 border-b-2 border-stone-200">
+                        <span class="w-6 h-6 rounded bg-[#6b1d2f] text-white text-xs font-bold flex items-center justify-center">2</span>
+                        <h2 class="text-xs uppercase tracking-wider font-bold text-stone-900 m-0">Personal Information</h2>
+                    </div>
+
+                    <div class="row mb-0 -mx-3">
+                        <div class="input-field col s12 m6 px-3">
+                            <input id="first_name" name="firstName" type="text" ng-model="firstName" required maxlength="50" placeholder=" " />
+                            <label for="first_name">First Name <span class="req">*</span></label>
+                            <span class="helper-text text-stone-600 text-xs font-medium">Maximum 50 characters.</span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.firstName.$touched && regForm.firstName.$error.required">
+                                <i class="material-icons text-xs">error</i> First name is required.
+                            </span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.firstName.$touched && regForm.firstName.$error.maxlength">
+                                <i class="material-icons text-xs">error</i> First name cannot exceed 50 characters.
+                            </span>
+                        </div>
+                        <div class="input-field col s12 m6 px-3">
+                            <input id="middle_name" name="middleName" type="text" ng-model="middleName" maxlength="50" placeholder=" " />
+                            <label for="middle_name">Middle Name <span class="grey-text">(optional)</span></label>
+                            <span class="helper-text text-stone-600 text-xs font-medium">Maximum 50 characters.</span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.middleName.$touched && regForm.middleName.$error.maxlength">
+                                <i class="material-icons text-xs">error</i> Middle name cannot exceed 50 characters.
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-0 -mx-3">
+                        <div class="input-field col s12 m6 px-3">
+                            <input id="last_name" name="lastName" type="text" ng-model="lastName" required maxlength="50" placeholder=" " />
+                            <label for="last_name">Last Name <span class="req">*</span></label>
+                            <span class="helper-text text-stone-600 text-xs font-medium">Maximum 50 characters.</span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.lastName.$touched && regForm.lastName.$error.required">
+                                <i class="material-icons text-xs">error</i> Last name is required.
+                            </span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.lastName.$touched && regForm.lastName.$error.maxlength">
+                                <i class="material-icons text-xs">error</i> Last name cannot exceed 50 characters.
+                            </span>
+                        </div>
+                        <div class="input-field col s12 m6 px-3">
+                            <input id="suffix" name="suffix" type="text" ng-model="suffix" ng-pattern="/^[A-Za-z0-9 .-]*$/" maxlength="10" placeholder=" " />
+                            <label for="suffix">Suffix <span class="grey-text">(optional)</span></label>
+                            <span class="helper-text text-stone-600 text-xs font-medium">Maximum 10 characters.</span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.suffix.$touched && regForm.suffix.$error.maxlength">
+                                <i class="material-icons text-xs">error</i> Suffix cannot exceed 10 characters.
+                            </span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.suffix.$touched && regForm.suffix.$error.pattern">
+                                <i class="material-icons text-xs">error</i> Suffix may contain only letters, numbers, dots, spaces, and hyphens.
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-0 -mx-3 items-start">
+                        <div class="col s12 m6 px-3 pt-2">
+                            <label for="gender" class="block text-xs uppercase tracking-wider font-bold text-stone-900 mb-1.5">
+                                Gender <span class="req">*</span>
+                            </label>
+                            <select id="gender" name="gender" class="browser-default vintage-select w-full" ng-model="gender" required>
+                                <option value="" disabled selected>Select gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Prefer not to say">Prefer not to say</option>
+                            </select>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.gender.$touched && regForm.gender.$error.required">
+                                <i class="material-icons text-xs">error</i> Gender is required.
+                            </span>
+                        </div>
+                        <div class="input-field col s12 m6 px-3">
+                            <input id="birthday" name="birthday" type="date" ng-model="birthday" ng-model-options="{ allowInvalid: true }" max="{{today}}" required />
+                            <label for="birthday" class="active">Birthday <span class="req">*</span></label>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.birthday.$touched && regForm.birthday.$error.required">
+                                <i class="material-icons text-xs">error</i> Birthday is required.
+                            </span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.birthday.$touched && regForm.birthday.$error.max">
+                                <i class="material-icons text-xs">error</i> Birthday cannot be a future date.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: Contact & Address -->
+                <div class="mb-8">
+                    <div class="flex items-center gap-2 pb-2 mb-4 border-b-2 border-stone-200">
+                        <span class="w-6 h-6 rounded bg-[#6b1d2f] text-white text-xs font-bold flex items-center justify-center">3</span>
+                        <h2 class="text-xs uppercase tracking-wider font-bold text-stone-900 m-0">Contact &amp; Delivery Address</h2>
+                    </div>
+
+                    <div class="row mb-0 -mx-3">
+                        <div class="input-field col s12 m6 px-3">
+                            <input id="email" name="email" type="email" ng-model="email" required maxlength="254" placeholder=" " />
+                            <label for="email">Email Address <span class="req">*</span></label>
+                            <span class="helper-text text-stone-600 text-xs font-medium">Maximum 254 characters.</span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.email.$touched && regForm.email.$error.required">
+                                <i class="material-icons text-xs">error</i> Email is required.
+                            </span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.email.$touched && regForm.email.$error.email">
+                                <i class="material-icons text-xs">error</i> Enter a valid email address.
+                            </span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.email.$touched && regForm.email.$error.maxlength">
+                                <i class="material-icons text-xs">error</i> Email cannot exceed 254 characters.
+                            </span>
+                        </div>
+                        <div class="input-field col s12 m6 px-3">
+                            <input id="contact_number" name="contactNumber" type="tel" ng-model="contactNumber" ng-change="sanitizeContactNumber()" ng-pattern="/^09\d{9}$/" required maxlength="11" placeholder=" " />
+                            <label for="contact_number">Contact Number <span class="req">*</span></label>
+                            <span class="helper-text text-stone-600 text-xs font-medium">Maximum 11 digits.</span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.contactNumber.$touched && regForm.contactNumber.$error.required">
+                                <i class="material-icons text-xs">error</i> Contact number is required.
+                            </span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.contactNumber.$touched && regForm.contactNumber.$error.pattern">
+                                <i class="material-icons text-xs">error</i> Enter 09 followed by 9 digits.
+                            </span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.contactNumber.$touched && regForm.contactNumber.$error.maxlength">
+                                <i class="material-icons text-xs">error</i> Contact number cannot exceed 11 digits.
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row m-0">
+                        <div class="input-field col s12 p-0">
+                            <input id="address" name="address" type="text" ng-model="address" required maxlength="254" placeholder=" " />
+                            <label for="address">Address <span class="req">*</span></label>
+                            <span class="helper-text text-stone-600 text-xs font-medium">Maximum 254 characters.</span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.address.$touched && regForm.address.$error.required">
+                                <i class="material-icons text-xs">error</i> Address is required.
+                            </span>
+                            <span class="helper-text red-text text-darken-3 text-xs flex items-center gap-1 font-bold mt-1" ng-show="regForm.address.$touched && regForm.address.$error.maxlength">
+                                <i class="material-icons text-xs">error</i> Address cannot exceed 254 characters.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Action Buttons: Perfectly Centered, Sized & Styled -->
+                <div class="pt-6 border-t-2 border-stone-200 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    
+                    <!-- Submit / Register Button -->
+                    <button class="btn waves-effect btn-store w-full cursor-pointer shadow"
+                            type="submit">
+                        <i class="material-icons text-white">{{ editingIndex == -1 ? 'person_add' : 'check' }}</i>
+                        <span class="font-bold">{{ editingIndex == -1 ? 'Register Customer' : 'Update Customer' }}</span>
+                    </button>
+
+                    <!-- Clear Form Button: Perfectly centered with 'clear' icon and zero weird whitespace -->
+                    <button class="btn waves-effect btn-store-outline w-full cursor-pointer shadow-sm"
+                            type="button"
+                            ng-click="clearRegistrationFunc()">
+                        <i class="material-icons">clear</i>
+                        <span class="font-bold">Clear Form</span>
+                    </button>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Registered Customers Table Card -->
+    <div class="card border border-[#ded8cd] shadow-md overflow-hidden rounded-lg bg-white">
+        
+        <div class="p-6 bg-[#f7f4ed] border-b-2 border-stone-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h2 class="card-title font-serif text-2xl font-bold text-stone-900 m-0">
+                    Registered Customers
+                </h2>
+                <p class="grey-text text-darken-1 text-stone-700 text-sm mt-1 mb-0">
+                    All customer records currently stored in the system.
+                </p>
+            </div>
+
+            <!-- Customer Record Counter -->
+            <div class="shrink-0">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#6b1d2f] text-white text-xs font-bold">
+                    <i class="material-icons text-xs">people</i>
+                    <span>{{ customerArray.length }} Records</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="p-0">
+            
+            <!-- Empty State -->
+            <div ng-if="customerArray.length === 0" class="p-12 text-center space-y-3">
+                <div class="w-14 h-14 rounded-full bg-stone-100 border border-stone-300 text-stone-400 mx-auto flex items-center justify-center">
+                    <i class="material-icons text-3xl">people_outline</i>
+                </div>
+                <div>
+                    <h3 class="font-serif text-lg font-bold text-stone-800 m-0">No Customer Records Yet</h3>
+                    <p class="text-xs text-stone-600 mt-1 mb-0">
+                        Registered customer records will appear in this table. Use the form above to add a new record.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Table with Responsive Scroll & High Contrast -->
+            <div ng-if="customerArray.length > 0" class="overflow-x-auto">
+                <table class="striped responsive-table vintage-table">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Middle Name</th>
+                            <th>Last Name</th>
+                            <th>Suffix</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Contact Number</th>
+                            <th>Gender</th>
+                            <th>Birthday</th>
+                            <th>Address</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="customer in customerArray">
+                            <td class="font-semibold text-stone-900">{{ customer.FName }}</td>
+                            <td>{{ customer.MName }}</td>
+                            <td class="font-semibold text-stone-900">{{ customer.LName }}</td>
+                            <td>{{ customer.Suffix }}</td>
+                            <td class="font-mono text-xs font-semibold text-stone-800">{{ customer.Username }}</td>
+                            <td class="text-stone-700 text-xs">{{ customer.Email }}</td>
+                            <td class="text-stone-800 text-xs font-mono font-medium">{{ customer.ContactNumber }}</td>
+                            <td class="text-stone-800 text-xs font-medium">{{ customer.Gender }}</td>
+                            <td class="text-stone-800 text-xs whitespace-nowrap">{{ customer.Birthday | date:'yyyy-MM-dd' }}</td>
+                            <td class="text-stone-800 text-xs max-w-xs truncate" title="{{ customer.Address }}">{{ customer.Address }}</td>
+                            <td class="text-center whitespace-nowrap">
+                                <div class="inline-flex items-center gap-1.5">
+                                    <button class="btn-small waves-effect btn-vintage-navy cursor-pointer"
+                                            title="Edit this customer"
+                                            ng-click="editFunc($index)">
+                                        <i class="material-icons text-xs">edit</i>
+                                        <span>Edit</span>
+                                    </button>
+                                    <button class="btn-small waves-effect btn-vintage-primary cursor-pointer"
+                                            title="Update customer"
+                                            ng-click="updateFunc($index)">
+                                        <i class="material-icons text-xs">refresh</i>
+                                        <span>Update</span>
+                                    </button>
+                                    <button class="btn-small waves-effect bg-white hover:bg-rose-700 text-rose-800 hover:text-white border border-rose-400 cursor-pointer"
+                                            title="Delete customer"
+                                            ng-click="deleteFunc($index)">
+                                        <i class="material-icons text-xs">delete</i>
+                                        <span>Delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

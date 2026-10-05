@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ThreadLine — Vintage Clothing Store &amp; Customer Management</title>
+
+    <!-- Google Fonts: Playfair Display (Classic Vintage Serif) + Plus Jakarta Sans (Crisp UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Materialize CSS (NO BOOTSTRAP) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Material Design Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
+
+    <!-- Tailwind CSS (NO BOOTSTRAP) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+                    },
+                    colors: {
+                        vintage: {
+                            wine: '#6b1d2f',
+                            winedark: '#531322',
+                            winehover: '#430d19',
+                            cream: '#faf8f4',
+                            paper: '#f3efe6',
+                            border: '#ded8cd',
+                            ink: '#1c1917',
+                            navy: '#1a2b49',
+                            navydark: '#111d33'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        :root {
+            --vintage-red: #6b1d2f;
+            --vintage-red-dark: #531322;
+            --vintage-cream: #faf8f4;
+            --vintage-ink: #1c1917;
+            --vintage-border: #ded8cd;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #faf8f4;
+            color: #1c1917;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, .font-serif, .brand-font {
+            font-family: 'Playfair Display', Georgia, serif;
+            letter-spacing: -0.01em;
+        }
+
+        /* Materialize Navigation Overrides */
+        nav {
+            width: auto;
+            height: auto;
+            line-height: normal;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        /* Comprehensive Button Reset (Fixes Materialize bloat, centering & unneeded space) */
+        .btn, .btn-small, .btn-large, button.btn, a.btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            height: auto !important;
+            line-height: 1.4 !important;
+            letter-spacing: 0.04em !important;
+            box-sizing: border-box !important;
+            gap: 0.5rem !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+            text-transform: none !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+            transition: all 0.2s ease !important;
+        }
+
+        .btn-small {
+            padding: 0.45rem 0.9rem !important;
+            font-size: 0.8125rem !important;
+        }
+
+        .btn {
+            padding: 0.65rem 1.4rem !important;
+            font-size: 0.875rem !important;
+        }
+
+        .btn-large {
+            padding: 0.85rem 1.85rem !important;
+            font-size: 0.95rem !important;
+        }
+
+        .btn i.material-icons,
+        .btn-small i.material-icons,
+        .btn-large i.material-icons {
+            float: none !important;
+            margin: 0 !important;
+            font-size: 1.2em !important;
+            line-height: 1 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        /* Primary Vintage Dark Red Button */
+        .btn-store, .btn-vintage-primary {
+            background-color: #6b1d2f !important;
+            color: #ffffff !important;
+            border: 1px solid #531322 !important;
+        }
+        .btn-store:hover, .btn-vintage-primary:hover {
+            background-color: #531322 !important;
+            color: #ffffff !important;
+        }
+
+        /* Secondary Vintage Button: Solid & High Contrast */
+        .btn-store-outline, .btn-vintage-outline {
+            background-color: #ffffff !important;
+            color: #6b1d2f !important;
+            border: 2px solid #6b1d2f !important;
+        }
+        .btn-store-outline:hover, .btn-vintage-outline:hover {
+            background-color: #6b1d2f !important;
+            color: #ffffff !important;
+        }
+
+        /* Accent Vintage Navy Button */
+        .btn-store-accent, .btn-vintage-navy {
+            background-color: #1a2b49 !important;
+            color: #ffffff !important;
+            border: 1px solid #111d33 !important;
+        }
+        .btn-store-accent:hover, .btn-vintage-navy:hover {
+            background-color: #111d33 !important;
+            color: #ffffff !important;
+        }
+
+        .req {
+            color: #b91c1c;
+            font-weight: 700;
+        }
+
+        /* Vintage High-Contrast Card Styles */
+        .card {
+            background: #ffffff;
+            border: 1px solid #ded8cd;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+            margin: 0 0 2rem 0;
+            overflow: hidden;
+        }
+
+        .card-content {
+            padding: 1.75rem 2rem !important;
+        }
+
+        /* High-Contrast Input Fields */
+        .input-field {
+            margin-top: 1.25rem;
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+
+        .input-field input:not([type="checkbox"]):not([type="radio"]),
+        .vintage-select {
+            box-sizing: border-box !important;
+            border: 1.5px solid #a8a29e !important;
+            border-radius: 6px !important;
+            background-color: #ffffff !important;
+            color: #1c1917 !important;
+            padding: 0 1rem !important;
+            height: 3rem !important;
+            line-height: 3rem !important;
+            font-size: 0.95rem !important;
+            transition: all 0.2s ease !important;
+            margin: 0 !important;
+        }
+
+        .input-field input:focus,
+        .vintage-select:focus {
+            border-color: #6b1d2f !important;
+            box-shadow: 0 0 0 3px rgba(107, 29, 47, 0.15) !important;
+            outline: none !important;
+        }
+
+        .input-field > label {
+            color: #44403c !important;
+            font-size: 0.925rem !important;
+            font-weight: 500 !important;
+            left: 1rem !important;
+            top: 0.85rem !important;
+            transform: none !important;
+            transition: all 0.2s ease !important;
+            pointer-events: none !important;
+        }
+
+        .input-field > label.active,
+        .input-field > input:focus + label,
+        .input-field > input:not(:placeholder-shown) + label {
+            transform: translateY(-1.75rem) scale(0.85) !important;
+            transform-origin: 0 0 !important;
+            color: #6b1d2f !important;
+            font-weight: 700 !important;
+            background-color: #ffffff;
+            padding: 0 4px;
+        }
+
+        /* Angular Validation States */
+        .input-field input.ng-invalid.ng-touched,
+        .input-field input.border-error-force,
+        .vintage-select.ng-invalid.ng-touched {
+            border: 1.5px solid #b91c1c !important;
+            background-color: #fffaf9 !important;
+        }
+
+        .input-field input.ng-invalid.ng-touched:focus,
+        .input-field input.border-error-force:focus,
+        .vintage-select.ng-invalid.ng-touched:focus {
+            box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.2) !important;
+        }
+
+        .input-field input.ng-valid.ng-touched:not(.border-error-force),
+        .input-field input.ng-valid.ng-dirty:not(.border-error-force) {
+            border: 1.5px solid #15803d !important;
+            background-color: #f7fcf8 !important;
+        }
+
+        .input-field input.ng-valid.ng-touched:not(.border-error-force):focus,
+        .input-field input.ng-valid.ng-dirty:not(.border-error-force):focus {
+            box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.2) !important;
+        }
+
+        /* High-Contrast Vintage Table Styling */
+        table.vintage-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table.vintage-table thead th {
+            background-color: #2b1117;
+            color: #f5f2eb;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 0.9rem 1.1rem;
+            border-bottom: 2px solid #531322;
+        }
+
+        table.vintage-table tbody td {
+            padding: 0.9rem 1.1rem;
+            color: #1c1917;
+            font-size: 0.875rem;
+            border-bottom: 1px solid #e7e2d8;
+            vertical-align: middle;
+        }
+
+        table.vintage-table tbody tr:nth-child(even) {
+            background-color: #fbf9f5;
+        }
+
+        table.vintage-table tbody tr:hover {
+            background-color: #f3efe6;
+        }
+
+        /* Materialize Sidenav */
+        .sidenav {
+            width: 290px;
+            background-color: #2b1117;
+            color: #ffffff;
+        }
+        .sidenav li > a {
+            color: #f5f2eb !important;
+            font-size: 0.95rem;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .sidenav li > a i {
+            color: #e2c48d !important;
+            margin: 0 !important;
+        }
+        .sidenav li > a:hover {
+            background-color: #430d19 !important;
+            color: #ffffff !important;
+        }
+    </style>
+</head>
+<body ng-app="ITEWebApplicationProjectModule" ng-controller="ITEWebApplicationProjectController" class="min-h-screen flex flex-col justify-between">
+
+    <!-- Header Navigation Bar -->
+    <header class="bg-white border-b-2 border-[#6b1d2f] sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+
+                <!-- Brand Monogram & Name -->
+                <a class="flex items-center gap-3 cursor-pointer group" ng-click="redirectFunc('/Main/Index')">
+                    <div class="w-11 h-11 rounded bg-[#6b1d2f] flex items-center justify-center text-white shadow group-hover:bg-[#531322] transition-colors">
+                        <i class="material-icons text-2xl">checkroom</i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-serif text-2xl font-bold tracking-wider text-[#6b1d2f] uppercase leading-none">
+                            ThreadLine
+                        </span>
+                        <span class="text-[10px] uppercase tracking-[0.25em] font-semibold text-stone-600 mt-1">
+                            Fine Clothing &amp; Tailoring
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center gap-8">
+                    <a class="text-xs uppercase tracking-[0.18em] font-bold text-stone-800 hover:text-[#6b1d2f] transition-colors py-2 relative group cursor-pointer"
+                       ng-click="redirectFunc('/Main/Index')">
+                        Home
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#6b1d2f] group-hover:w-full transition-all duration-200"></span>
+                    </a>
+                    <a class="text-xs uppercase tracking-[0.18em] font-bold text-stone-800 hover:text-[#6b1d2f] transition-colors py-2 relative group cursor-pointer"
+                       ng-click="redirectFunc('/Main/RegistrationPage')">
+                        Register
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#6b1d2f] group-hover:w-full transition-all duration-200"></span>
+                    </a>
+                    <a class="text-xs uppercase tracking-[0.18em] font-bold text-stone-800 hover:text-[#6b1d2f] transition-colors py-2 relative group cursor-pointer"
+                       ng-click="redirectFunc('/Main/AboutPage')">
+                        About
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#6b1d2f] group-hover:w-full transition-all duration-200"></span>
+                    </a>
+                    <a class="text-xs uppercase tracking-[0.18em] font-bold text-stone-800 hover:text-[#6b1d2f] transition-colors py-2 relative group cursor-pointer"
+                       ng-click="redirectFunc('/Main/ContactPage')">
+                        Contact
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#6b1d2f] group-hover:w-full transition-all duration-200"></span>
+                    </a>
+                </nav>
+
+                <!-- Right Action: Clean Logout Button -->
+                <div class="flex items-center gap-3">
+                    <button class="btn-small waves-effect bg-[#6b1d2f] hover:bg-[#531322] text-white flex items-center justify-center cursor-pointer shadow-sm"
+                            type="button"
+                            ng-click="redirectFunc('/Main/LoginPage')">
+                        <i class="material-icons text-sm">exit_to_app</i>
+                        <span class="text-xs font-semibold">Logout</span>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button class="md:hidden p-2 rounded text-stone-800 hover:bg-stone-100 sidenav-trigger cursor-pointer"
+                            data-target="mobile-nav">
+                        <i class="material-icons text-2xl">menu</i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Sidenav Drawer (Materialize) -->
+    <ul class="sidenav" id="mobile-nav">
+        <li class="p-6 border-b border-[#430d19]">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded bg-[#430d19] flex items-center justify-center text-white">
+                    <i class="material-icons">checkroom</i>
+                </div>
+                <div>
+                    <h5 class="font-serif text-lg font-bold text-white tracking-wider uppercase m-0 leading-tight">ThreadLine</h5>
+                    <p class="text-[10px] text-stone-300 tracking-wider uppercase m-0 mt-0.5">Fine Clothing Store</p>
+                </div>
+            </div>
+        </li>
+        <li class="pt-4"><a class="waves-effect cursor-pointer" ng-click="redirectFunc('/Main/Index')"><i class="material-icons">home</i>Home</a></li>
+        <li><a class="waves-effect cursor-pointer" ng-click="redirectFunc('/Main/RegistrationPage')"><i class="material-icons">person_add</i>Register Customer</a></li>
+        <li><a class="waves-effect cursor-pointer" ng-click="redirectFunc('/Main/AboutPage')"><i class="material-icons">info</i>About ThreadLine</a></li>
+        <li><a class="waves-effect cursor-pointer" ng-click="redirectFunc('/Main/ContactPage')"><i class="material-icons">phone</i>Contact</a></li>
+        <li class="divider bg-[#430d19] my-4"></li>
+        <li><a class="waves-effect cursor-pointer text-rose-300" ng-click="redirectFunc('/Main/LoginPage')"><i class="material-icons text-rose-300">exit_to_app</i>Logout</a></li>
+    </ul>
+
+    <!-- Main Content Container (Supports full-width heroes on home page) -->
+    <main class="w-full flex-grow">
+        @RenderBody()
+    </main>
+
+    <!-- Clean, Balanced Vintage Footer -->
+    <footer class="bg-[#1f0d12] text-stone-200 border-t-2 border-[#6b1d2f] mt-16 pt-12 pb-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 pb-10 border-b border-stone-800">
+
+                <!-- Left Column: Store Details -->
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded bg-[#6b1d2f] flex items-center justify-center text-white">
+                            <i class="material-icons text-lg">checkroom</i>
+                        </div>
+                        <span class="font-serif text-xl font-bold tracking-wider text-white uppercase">ThreadLine</span>
+                    </div>
+                    <p class="text-sm text-stone-300 leading-relaxed font-normal max-w-md">
+                        ThreadLine Clothing Store — A dedicated clothing store and client management system designed for keeping customer details accurate and organised.
+                    </p>
+                </div>
+
+                <!-- Right Column: Contact & Flagship Hours -->
+                <div class="space-y-2 text-sm text-stone-300">
+                    <h4 class="font-serif text-base font-bold text-white mb-3">Customer Support &amp; Boutique</h4>
+                    <p class="flex items-center gap-2 m-0 text-stone-300">
+                        <i class="material-icons text-sm text-[#e2c48d]">location_on</i>
+                        <span>123 Fashion Street, Manila, Philippines</span>
+                    </p>
+                    <p class="flex items-center gap-2 m-0 text-stone-300">
+                        <i class="material-icons text-sm text-[#e2c48d]">call</i>
+                        <span>0917 000 0000</span>
+                    </p>
+                    <p class="flex items-center gap-2 m-0 text-stone-300">
+                        <i class="material-icons text-sm text-[#e2c48d]">email</i>
+                        <span>support@threadline.example</span>
+                    </p>
+                    <p class="flex items-center gap-2 m-0 text-xs text-stone-400 pt-1">
+                        <i class="material-icons text-sm text-[#e2c48d]">schedule</i>
+                        <span>Monday &ndash; Saturday, 9:00 AM &ndash; 8:00 PM</span>
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Footer Bottom: Clean Center/Balanced Links & Copyright -->
+            <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-400">
+                <p class="m-0 text-center sm:text-left text-stone-300">
+                    &copy; @DateTime.Now.Year <strong class="text-white">ThreadLine Clothing Store</strong>, Customer Management System. All rights reserved.
+                </p>
+                <div class="flex items-center gap-6">
+                    <a class="cursor-pointer text-stone-300 hover:text-white transition-colors" ng-click="redirectFunc('/Main/Index')">Home</a>
+                    <a class="cursor-pointer text-stone-300 hover:text-white transition-colors" ng-click="redirectFunc('/Main/RegistrationPage')">Register</a>
+                    <a class="cursor-pointer text-stone-300 hover:text-white transition-colors" ng-click="redirectFunc('/Main/AboutPage')">About</a>
+                    <a class="cursor-pointer text-stone-300 hover:text-white transition-colors" ng-click="redirectFunc('/Main/ContactPage')">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="~/Scripts/angular.min.js"></script>
+
+    <!-- AngularJS Application Scripts -->
+    <script src="~/Scripts/HolyScripts/Module.js"></script>
+    <script src="~/Scripts/HolyScripts/Service.js"></script>
+    <script src="~/Scripts/HolyScripts/Controller.js"></script>
+
+    <!-- Materialize Initializer -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var sidenavs = document.querySelectorAll('.sidenav');
+            if (sidenavs.length && window.M) {
+                M.Sidenav.init(sidenavs);
+            }
+        });
+    </script>
+</body>
+</html>

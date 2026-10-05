@@ -33,7 +33,6 @@ namespace ITEWebApplicationProject.Controllers
             return View();
         }
 
-        // Sends data from the C# Controller to the View (consumed by AngularJS $http)
         public JsonResult GetWelcomeMessage()
         {
             return Json("Welcome to ThreadLine Clothing Store!", JsonRequestBehavior.AllowGet);
