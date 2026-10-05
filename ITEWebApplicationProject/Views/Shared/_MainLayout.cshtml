@@ -3,27 +3,20 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewBag.Title - ThreadLine</title>
+    <title>ThreadLine</title>
 
-    <!-- CSS Framework: Materialize CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
-    <!-- Material Design Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
 
-    <!-- CSS Framework: Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
     <style>
-        /* Materialize's global element rules fight the Tailwind layout - neutralise them.
-           (Materialize sets nav { width: 100% }, which is what squashed the header.) */
         nav { width: auto; height: auto; line-height: normal; background: transparent; box-shadow: none; }
         body { background-color: #f1f5f9; }
 
-        /* Simple solid store buttons (no gradients) */
         .btn-store { background-color: #0f172a; }
         .btn-store:hover { background-color: #334155; }
         .btn-store-accent { background-color: #475569; }
@@ -31,17 +24,43 @@
         .btn-store-outline { background-color: #e2e8f0; color: #0f172a; }
         .btn-store-outline:hover { background-color: #cbd5e1; }
 
-        /* Required-field marker */
         .req { color: #dc2626; font-weight: 700; }
 
-        /* Roomier cards */
+        .input-field input:not([type="checkbox"]):not([type="radio"]) {
+            box-sizing: border-box;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 4px;
+            background-color: #ffffff;
+            color: #0f172a;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .input-field input.ng-invalid.ng-touched,
+        .input-field input.border-error-force {
+            border: 1.5px solid #ba1a1a !important;
+        }
+
+        .input-field input.ng-invalid.ng-touched:focus,
+        .input-field input.border-error-force:focus {
+            box-shadow: 0 0 0 2px rgba(186, 26, 26, 0.2) !important;
+        }
+
+        .input-field input.ng-valid.ng-touched:not(.border-error-force),
+        .input-field input.ng-valid.ng-dirty:not(.border-error-force) {
+            border: 1.5px solid #2e7d32 !important;
+        }
+
+        .input-field input.ng-valid.ng-touched:not(.border-error-force):focus,
+        .input-field input.ng-valid.ng-dirty:not(.border-error-force):focus {
+            box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2) !important;
+        }
+
         .card { margin: 0 0 1.5rem 0; }
         .card-content { padding: 1.5rem 1.75rem; }
     </style>
 </head>
 <body ng-app="ITEWebApplicationProjectModule" ng-controller="ITEWebApplicationProjectController">
 
-    <!-- Header / Navigation -->
     <header class="bg-slate-900 text-white shadow">
         <div class="w-full px-4 sm:px-6 lg:px-10 py-3 flex flex-wrap items-center justify-between gap-4">
             <a class="flex items-center gap-2 cursor-pointer shrink-0" ng-click="redirectFunc('/Main/Index')">
@@ -58,15 +77,13 @@
         </div>
     </header>
 
-    <!-- Page content (full width) -->
     <main class="w-full px-4 sm:px-6 lg:px-10 py-8">
         @RenderBody()
     </main>
 
-    <!-- Footer -->
     <footer class="bg-slate-900 text-slate-300 mt-12">
         <div class="w-full px-4 sm:px-6 lg:px-10 py-6 flex flex-wrap items-center justify-between gap-3 text-sm">
-            <p>&copy; @DateTime.Now.Year ThreadLine Clothing Store &mdash; Customer Management System</p>
+            <p>&copy; @DateTime.Now.Year ThreadLine Clothing Store, Customer Management System</p>
             <div class="flex flex-wrap gap-4">
                 <a class="cursor-pointer hover:text-white" ng-click="redirectFunc('/Main/Index')">Home</a>
                 <a class="cursor-pointer hover:text-white" ng-click="redirectFunc('/Main/RegistrationPage')">Register</a>
@@ -76,13 +93,11 @@
         </div>
     </footer>
 
-    <!-- JavaScript Dependencies -->
     <script src="~/Scripts/jquery-3.7.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="~/Scripts/angular.min.js"></script>
 
-    <!-- Application Scripts (order matters) -->
     <script src="~/Scripts/HolyScripts/Module.js"></script>
     <script src="~/Scripts/HolyScripts/Service.js"></script>
     <script src="~/Scripts/HolyScripts/Controller.js"></script>

@@ -1,6 +1,5 @@
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
-    ViewBag.Title = "Customer Registration";
 }
 
 <div class="card">
@@ -13,102 +12,122 @@
             Fields marked with <span class="req">*</span> are required.
         </p>
 
-        <form ng-submit="$event.preventDefault()">
+        <form name="regForm" novalidate ng-submit="editingIndex == -1 ? registrationFunc() : updateFunc(editingIndex)">
 
             <div class="row">
                 <div class="input-field col s12">
-                    <input id="username" type="text" ng-model="username" required maxlength="20" />
+                    <input id="username" name="username" type="text" ng-model="username" required maxlength="20" />
                     <label for="username">Username <span class="req">*</span></label>
-                    <span class="helper-text">Maximum 20 characters. Must be unique.</span>
+                    <span class="helper-text">Maximum 20 characters.</span>
+                    <span class="helper-text red-text" ng-show="regForm.username.$touched && regForm.username.$error.required">Username is required.</span>
+                    <span class="helper-text red-text" ng-show="regForm.username.$touched && regForm.username.$error.maxlength">Username cannot exceed 20 characters.</span>
                 </div>
             </div>
 
             <div class="row">
                 <div class="input-field col s12 m6">
-                    <input id="first_name" type="text" ng-model="firstName" required maxlength="50" />
+                    <input id="first_name" name="firstName" type="text" ng-model="firstName" required maxlength="50" />
                     <label for="first_name">First Name <span class="req">*</span></label>
                     <span class="helper-text">Maximum 50 characters.</span>
+                    <span class="helper-text red-text" ng-show="regForm.firstName.$touched && regForm.firstName.$error.required">First name is required.</span>
+                    <span class="helper-text red-text" ng-show="regForm.firstName.$touched && regForm.firstName.$error.maxlength">First name cannot exceed 50 characters.</span>
                 </div>
                 <div class="input-field col s12 m6">
-                    <input id="middle_name" type="text" ng-model="middleName" maxlength="50" />
+                    <input id="middle_name" name="middleName" type="text" ng-model="middleName" maxlength="50" />
                     <label for="middle_name">Middle Name <span class="grey-text">(optional)</span></label>
-                    <span class="helper-text">Optional. Maximum 50 characters.</span>
+                    <span class="helper-text">Maximum 50 characters.</span>
+                    <span class="helper-text red-text" ng-show="regForm.middleName.$touched && regForm.middleName.$error.maxlength">Middle name cannot exceed 50 characters.</span>
                 </div>
             </div>
 
             <div class="row">
                 <div class="input-field col s12 m6">
-                    <input id="last_name" type="text" ng-model="lastName" required maxlength="50" />
+                    <input id="last_name" name="lastName" type="text" ng-model="lastName" required maxlength="50" />
                     <label for="last_name">Last Name <span class="req">*</span></label>
                     <span class="helper-text">Maximum 50 characters.</span>
+                    <span class="helper-text red-text" ng-show="regForm.lastName.$touched && regForm.lastName.$error.required">Last name is required.</span>
+                    <span class="helper-text red-text" ng-show="regForm.lastName.$touched && regForm.lastName.$error.maxlength">Last name cannot exceed 50 characters.</span>
                 </div>
                 <div class="input-field col s12 m6">
-                    <input id="suffix" type="text" ng-model="suffix" maxlength="10" />
+                    <input id="suffix" name="suffix" type="text" ng-model="suffix" maxlength="10" />
                     <label for="suffix">Suffix <span class="grey-text">(optional)</span></label>
-                    <span class="helper-text">Optional (Jr., III, ...). Maximum 10 characters.</span>
+                    <span class="helper-text">Maximum 10 characters.</span>
+                    <span class="helper-text red-text" ng-show="regForm.suffix.$touched && regForm.suffix.$error.maxlength">Suffix cannot exceed 10 characters.</span>
                 </div>
             </div>
 
             <div class="row">
                 <div class="input-field col s12 m6">
-                    <input id="email" type="email" ng-model="email" required maxlength="254" />
+                    <input id="email" name="email" type="email" ng-model="email" required maxlength="254" />
                     <label for="email">Email Address <span class="req">*</span></label>
-                    <span class="helper-text">Valid email address. Must be unique.</span>
+                    <span class="helper-text">Maximum 254 characters.</span>
+                    <span class="helper-text red-text" ng-show="regForm.email.$touched && regForm.email.$error.required">Email is required.</span>
+                    <span class="helper-text red-text" ng-show="regForm.email.$touched && regForm.email.$error.email">Enter a valid email address.</span>
+                    <span class="helper-text red-text" ng-show="regForm.email.$touched && regForm.email.$error.maxlength">Email cannot exceed 254 characters.</span>
                 </div>
                 <div class="input-field col s12 m6">
-                    <input id="contact_number" type="tel" ng-model="contactNumber" required maxlength="11"/>
+                    <input id="contact_number" name="contactNumber" type="tel" ng-model="contactNumber" ng-change="sanitizeContactNumber()" ng-pattern="/^09\d{9}$/" required maxlength="11" />
                     <label for="contact_number">Contact Number <span class="req">*</span></label>
-                    <span class="helper-text">Must start with 09 and be exactly 11 digits.</span>
+                    <span class="helper-text">Maximum 11 digits.</span>
+                    <span class="helper-text red-text" ng-show="regForm.contactNumber.$touched && regForm.contactNumber.$error.required">Contact number is required.</span>
+                    <span class="helper-text red-text" ng-show="regForm.contactNumber.$touched && regForm.contactNumber.$error.pattern">Enter 09 followed by 9 digits.</span>
+                    <span class="helper-text red-text" ng-show="regForm.contactNumber.$touched && regForm.contactNumber.$error.maxlength">Contact number cannot exceed 11 digits.</span>
                 </div>
             </div>
 
             <div class="row">
                 <div class="input-field col s12 m6">
-                    <input id="password" type="password" ng-model="password" required maxlength="64" />
+                    <input id="password" name="password" type="password" ng-model="password" ng-pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/" required maxlength="64" />
                     <label for="password">Password <span class="req">*</span></label>
-                    <span class="helper-text">At least 8 characters with uppercase, lowercase, number, and special character.</span>
+                    <span class="helper-text">Maximum 64 characters.</span>
+                    <span class="helper-text red-text" ng-show="regForm.password.$touched && regForm.password.$error.required">Password is required.</span>
+                    <span class="helper-text red-text" ng-show="regForm.password.$touched && regForm.password.$error.pattern">Password must be at least 8 characters and include uppercase, lowercase, number, and special characters.</span>
+                    <span class="helper-text red-text" ng-show="regForm.password.$touched && regForm.password.$error.maxlength">Password cannot exceed 64 characters.</span>
                 </div>
                 <div class="input-field col s12 m6">
-                    <input id="confirm_password" type="password" ng-model="confirmPassword" required maxlength="64" />
+                    <input id="confirm_password" name="confirmPassword" type="password" ng-model="confirmPassword" ng-class="{'border-error-force': regForm.confirmPassword.$touched && confirmPassword !== password}" required maxlength="64" />
                     <label for="confirm_password">Confirm Password <span class="req">*</span></label>
-                    <span class="helper-text">Must match the password.</span>
+                    <span class="helper-text">Maximum 64 characters.</span>
+                    <span class="helper-text red-text" ng-show="regForm.confirmPassword.$touched && regForm.confirmPassword.$error.required">Confirm password is required.</span>
+                    <span class="helper-text red-text" ng-show="regForm.confirmPassword.$touched && confirmPassword !== password && confirmPassword">Passwords do not match.</span>
+                    <span class="helper-text red-text" ng-show="regForm.confirmPassword.$touched && regForm.confirmPassword.$error.maxlength">Confirm password cannot exceed 64 characters.</span>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col s12 m6">
                     <label for="gender" class="block text-sm font-medium text-slate-700 mb-1 mt-3">Gender <span class="req">*</span></label>
-                    <select id="gender" class="browser-default" ng-model="gender">
+                    <select id="gender" name="gender" class="browser-default" ng-model="gender" required>
                         <option value="" disabled selected>Select gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Prefer not to say">Prefer not to say</option>
                     </select>
-                    <span class="helper-text">Select one.</span>
+                    <span class="helper-text red-text" ng-show="regForm.gender.$touched && regForm.gender.$error.required">Gender is required.</span>
                 </div>
                 <div class="input-field col s12 m6">
-                    <input id="birthday" type="date" ng-model="birthday" ng-model-options="{ allowInvalid: true }" max="{{today}}" required />
+                    <input id="birthday" name="birthday" type="date" ng-model="birthday" ng-model-options="{ allowInvalid: true }" max="{{today}}" required />
                     <label for="birthday" class="active">Birthday <span class="req">*</span></label>
-                    <span class="helper-text">Cannot be a future date.</span>
+                    <span class="helper-text red-text" ng-show="regForm.birthday.$touched && regForm.birthday.$error.required">Birthday is required.</span>
+                    <span class="helper-text red-text" ng-show="regForm.birthday.$touched && regForm.birthday.$error.max">Birthday cannot be a future date.</span>
                 </div>
             </div>
 
             <div class="row">
                 <div class="input-field col s12">
-                    <input id="address" type="text" ng-model="address" required maxlength="254" />
+                    <input id="address" name="address" type="text" ng-model="address" required maxlength="254" />
                     <label for="address">Address <span class="req">*</span></label>
                     <span class="helper-text">Maximum 254 characters.</span>
+                    <span class="helper-text red-text" ng-show="regForm.address.$touched && regForm.address.$error.required">Address is required.</span>
+                    <span class="helper-text red-text" ng-show="regForm.address.$touched && regForm.address.$error.maxlength">Address cannot exceed 254 characters.</span>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col s12 m4">
-                    <button class="btn waves-effect btn-store w-full" type="button" ng-click="registrationFunc()">Register Customer</button>
+                <div class="col s12 m6">
+                    <button class="btn waves-effect btn-store w-full" type="submit">{{ editingIndex == -1 ? 'Register Customer' : 'Update Customer' }}</button>
                 </div>
-                <div class="col s12 m4">
-                    <button class="btn waves-effect btn-store-accent w-full" type="button" ng-click="updateFunc(editingIndex)">Update Customer</button>
-                </div>
-                <div class="col s12 m4">
+                <div class="col s12 m6">
                     <button class="btn waves-effect btn-store-outline w-full" type="button" ng-click="clearRegistrationFunc()">Clear Form</button>
                 </div>
             </div>

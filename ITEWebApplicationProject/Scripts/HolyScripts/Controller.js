@@ -1,20 +1,14 @@
 app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApplicationProjectService) {
 
-    // Temporary client-side collection of customer records (no database)
     $scope.customerArray = [];
 
-    // -1 means "no row is being edited" (we are registering a new record)
     $scope.editingIndex = -1;
 
-    // Today's date as yyyy-mm-dd, used as the max for the birthday input
     var now = new Date();
     var mm = ("0" + (now.getMonth() + 1)).slice(-2);
     var dd = ("0" + now.getDate()).slice(-2);
     $scope.today = now.getFullYear() + "-" + mm + "-" + dd;
 
-    // ---------------------------------------------------------------
-    // WELCOME MESSAGE (comes from the C# MainController via $http)
-    // ---------------------------------------------------------------
     $scope.GetWelcomeMessage = function () {
         var getData = ITEWebApplicationProjectService.GetWelcomeMessage();
 
@@ -23,9 +17,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
         });
     };
 
-    // ---------------------------------------------------------------
-    // NAVIGATION
-    // ---------------------------------------------------------------
     $scope.redirectFunc = function (targetURL) {
         window.location.href = targetURL;
     };
@@ -39,9 +30,34 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
         $scope.loginPassword = "";
     };
 
-    // ---------------------------------------------------------------
-    // CLEAR REGISTRATION FORM
-    // ---------------------------------------------------------------
+    $scope.resetRegistrationFormState = function () {
+        if ($scope.regForm) {
+            $scope.regForm.$setPristine();
+            $scope.regForm.$setUntouched();
+        }
+    };
+
+    $scope.touchAllFields = function () {
+        if (!$scope.regForm) {
+            return;
+        }
+
+        for (var controlName in $scope.regForm) {
+            if (Object.prototype.hasOwnProperty.call($scope.regForm, controlName)) {
+                var control = $scope.regForm[controlName];
+                if (control && control.$invalid && typeof control.$setTouched === "function") {
+                    control.$setTouched();
+                }
+            }
+        }
+    };
+
+    $scope.sanitizeContactNumber = function () {
+        if ($scope.contactNumber != undefined) {
+            $scope.contactNumber = $scope.contactNumber.replace(/\D/g, "").slice(0, 11);
+        }
+    };
+
     $scope.clearRegistrationFunc = function () {
         $scope.username = "";
         $scope.firstName = "";
@@ -56,15 +72,11 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
         $scope.birthday = "";
         $scope.address = "";
         $scope.editingIndex = -1;
+        $scope.resetRegistrationFormState();
     };
 
-    // ---------------------------------------------------------------
-    // VALIDATION
-    // userindex = the row being edited, or -1 when registering a new record
-    // ---------------------------------------------------------------
     $scope.inputValidation = function (userindex) {
 
-        // ----- Required fields -----
         if ($scope.firstName == undefined || $scope.firstName == "") {
             Swal.fire({
                 title: "Notification",
@@ -146,7 +158,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
             return false;
         }
 
-        // ----- Email format -----
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($scope.email)) {
             Swal.fire({
                 title: "Notification",
@@ -156,7 +167,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
             return false;
         }
 
-        // ----- Contact number format (starts with 09, exactly 11 digits) -----
         if (!/^09\d{9}$/.test($scope.contactNumber)) {
             Swal.fire({
                 title: "Notification",
@@ -166,7 +176,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
             return false;
         }
 
-        // ----- Password strength -----
         if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test($scope.password)) {
             Swal.fire({
                 title: "Notification",
@@ -176,7 +185,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
             return false;
         }
 
-        // ----- Confirm password -----
         if ($scope.password != $scope.confirmPassword) {
             Swal.fire({
                 title: "Notification",
@@ -186,7 +194,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
             return false;
         }
 
-        // ----- Range validation (birthday cannot be a future date) -----
         if (new Date($scope.birthday) > new Date($scope.today)) {
             Swal.fire({
                 title: "Notification",
@@ -196,7 +203,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
             return false;
         }
 
-        // ----- Uniqueness (skip the row being updated) -----
         var emailLower = $scope.email.toLowerCase();
         var usernameLower = $scope.username.toLowerCase();
 
@@ -226,8 +232,8 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
         return true;
     };
 
-    // CREATE - adds a new customer to the AngularJS array
     $scope.registrationFunc = function () {
+        $scope.touchAllFields();
 
         if ($scope.inputValidation(-1) == false) {
             return;
@@ -256,7 +262,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
         $scope.clearRegistrationFunc();
     };
 
-    // READ (edit) - loads the clicked row into the registration form
     $scope.editFunc = function (index) {
         var customer = $scope.customerArray[index];
 
@@ -274,9 +279,9 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
         $scope.address = customer.Address;
 
         $scope.editingIndex = index;
+        $scope.resetRegistrationFormState();
     };
 
-    // UPDATE - saves the form back into the row being edited
     $scope.updateFunc = function (userindex) {
 
         if (userindex == undefined || userindex < 0) {
@@ -287,6 +292,8 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
             });
             return;
         }
+
+        $scope.touchAllFields();
 
         if ($scope.inputValidation(userindex) == false) {
             return;
@@ -313,7 +320,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
         $scope.clearRegistrationFunc();
     };
 
-    // DELETE - confirms, then removes the record from the AngularJS array
     $scope.deleteFunc = function (userindex) {
         var customer = $scope.customerArray[userindex];
 
@@ -325,9 +331,6 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
             confirmButtonText: "Yes, delete it!"
         }).then(function (result) {
             if (result.isConfirmed) {
-
-                // Swal's .then callback runs OUTSIDE AngularJS's digest cycle,
-                // so $apply() is needed for the table to refresh.
                 $scope.$apply(function () {
                     $scope.customerArray.splice(userindex, 1);
                 });

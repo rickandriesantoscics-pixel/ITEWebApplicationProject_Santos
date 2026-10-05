@@ -1,10 +1,7 @@
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
-    ViewBag.Title = "Home";
 }
 
-<!-- ng-init calls the AngularJS controller, which fetches the welcome message
-     from the C# MainController (GetWelcomeMessage) and binds it below. -->
 <div ng-init="GetWelcomeMessage()">
 
     <div class="card">
