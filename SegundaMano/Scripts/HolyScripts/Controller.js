@@ -1,4 +1,4 @@
-app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApplicationProjectService) {
+app.controller("SegundaManoController", ["$scope", "SegundaManoService", function ($scope, SegundaManoService) {
 
     $scope.customerArray = [];
 
@@ -10,7 +10,7 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
     $scope.today = now.getFullYear() + "-" + mm + "-" + dd;
 
     $scope.GetWelcomeMessage = function () {
-        var getData = ITEWebApplicationProjectService.GetWelcomeMessage();
+        var getData = SegundaManoService.GetWelcomeMessage();
 
         getData.then(function (returnedData) {
             $scope.welcomeMessage = returnedData.data;
@@ -371,4 +371,4 @@ app.controller("ITEWebApplicationProjectController", function ($scope, ITEWebApp
         });
     };
 
-});
+}]);

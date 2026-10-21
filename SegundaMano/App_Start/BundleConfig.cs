@@ -1,7 +1,7 @@
 using System.Web;
 using System.Web.Optimization;
 
-namespace ITEWebApplicationProject
+namespace SegundaMano
 {
     public class BundleConfig
     {

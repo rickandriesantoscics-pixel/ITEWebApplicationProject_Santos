@@ -309,7 +309,7 @@
         }
     </style>
 </head>
-<body ng-app="ITEWebApplicationProjectModule" ng-controller="ITEWebApplicationProjectController" class="min-h-screen flex flex-col justify-between">
+<body ng-app="SegundaManoModule" ng-controller="SegundaManoController" class="min-h-screen flex flex-col justify-between">
 
     <!-- Header Navigation Bar -->
     <header class="bg-white border-b-2 border-[#6b1d2f] sticky top-0 z-50 shadow-sm">
@@ -463,10 +463,20 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="~/Scripts/angular.min.js"></script>
 
-    <!-- AngularJS Application Scripts -->
-    <script src="~/Scripts/HolyScripts/Module.js"></script>
-    <script src="~/Scripts/HolyScripts/Service.js"></script>
-    <script src="~/Scripts/HolyScripts/Controller.js"></script>
+    <!-- AngularJS Application Scripts
+         The ?v= value is each file's last-write time. It changes whenever a script is edited,
+         so the browser is forced to download the current file instead of reusing a stale cached
+         copy. Without this, renaming the Angular module leaves the browser running the old
+         Module.js while the new layout asks for the new module name, which fails bootstrap with
+         "$injector:modulerr" (the exception shown in the minified angular.min.js stack). -->
+    @{
+        var moduleScriptVersion = System.IO.File.GetLastWriteTime(Context.Server.MapPath("~/Scripts/HolyScripts/Module.js")).Ticks;
+        var serviceScriptVersion = System.IO.File.GetLastWriteTime(Context.Server.MapPath("~/Scripts/HolyScripts/Service.js")).Ticks;
+        var controllerScriptVersion = System.IO.File.GetLastWriteTime(Context.Server.MapPath("~/Scripts/HolyScripts/Controller.js")).Ticks;
+    }
+    <script src="~/Scripts/HolyScripts/Module.js?v=@moduleScriptVersion"></script>
+    <script src="~/Scripts/HolyScripts/Service.js?v=@serviceScriptVersion"></script>
+    <script src="~/Scripts/HolyScripts/Controller.js?v=@controllerScriptVersion"></script>
 
     <!-- Materialize Initializer -->
     <script>

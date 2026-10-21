@@ -1,11 +1,11 @@
-﻿using ITEWebApplicationProject.Models.Maps;
-using ITEWebApplicationProject.Models.Tables;
+﻿using SegundaMano.Models.Maps;
+using SegundaMano.Models.Tables;
 using MySql.Data.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 
-namespace ITEWebApplicationProject.Models.Context
+namespace SegundaMano.Models.Context
 {
     [DbConfigurationType(typeof(MySqlEFConfiguration))]
     public class SegundaManoContext : DbContext

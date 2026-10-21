@@ -1,11 +1,11 @@
-using ITEWebApplicationProject.Models.Tables;
+using SegundaMano.Models.Tables;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Web;
 
-namespace ITEWebApplicationProject.Models.Maps
+namespace SegundaMano.Models.Maps
 {
     public class TblPaymentsMap : EntityTypeConfiguration<TblPaymentsModel>
     {

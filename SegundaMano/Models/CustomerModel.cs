@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ITEWebApplicationProject.Models
+namespace SegundaMano.Models
 {
     public class CustomerModel
     {
